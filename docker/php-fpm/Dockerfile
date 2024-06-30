@@ -17,11 +17,6 @@ RUN apk --no-cache add shadow && \
     groupmod -o -g ${PGID} www-data && \
     usermod -o -u ${PUID} -g www-data www-data
 
-## Nginx
-#RUN apk add --update --no-cache nginx
-#COPY ./docker/php-fpm/nginx.conf /etc/nginx/
-#RUN chown -Rf www-data:www-data /var/lib/nginx
-
 # Source code
 RUN chown www-data:www-data /var/www
 COPY --chown=www-data:www-data ./ /var/www
@@ -29,19 +24,11 @@ WORKDIR /var/www
 
 #change user to non-root
 USER www-data
-#USER ${PUID}:${PGID}
 
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 ARG BUILD_MODE=dev
-#RUN if [ ${BUILD_MODE} = dev ]; \
-#    then \
-#      composer install --no-interaction; \
-#    else \
-#      composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader; \
-#    fi;
-#RUN chown -R www-data:www-data /var/www/vendor/
 
 CMD bash -c "composer install && php-fpm"
 
