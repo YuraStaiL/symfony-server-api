@@ -4,9 +4,6 @@ FROM php:8.2-fpm-alpine
 RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf bash nano
 RUN apk add --update linux-headers
 
-# Postgres
-RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_pgsql
-
 # MySQL
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
